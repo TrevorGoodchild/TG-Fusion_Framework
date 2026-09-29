@@ -1,0 +1,17 @@
+,ID,Category,Name,Expression,Purpose,Inputs,Output,Aspect Ratio Relevant,Verified,Notes
+0,EXP-COMP-001,Comp,Comp Width,"comp:GetPrefs(""Comp.FrameFormat.Width"")",Read current composition width,,Number,YES,REFERENCE,Framework expression
+1,EXP-COMP-002,Comp,Comp Height,"comp:GetPrefs(""Comp.FrameFormat.Height"")",Read current composition height,,Number,YES,REFERENCE,Framework expression
+2,EXP-COMP-003,Comp,Comp Aspect Ratio,"comp:GetPrefs(""Comp.FrameFormat.Width"") / comp:GetPrefs(""Comp.FrameFormat.Height"")",Read current composition width/height ratio,,Number,YES,REFERENCE,Framework expression
+3,EXP-EASE-001,Easing,Linear,p,Linear interpolation for normalized progress,p (normalized 0–1),Number 0–1,NO,VERIFIED,Verified in Fusion with TG_AN_InOutTest_v0.2 on 2026-09-15.
+4,EXP-EASE-002,Easing,Ease In Quadratic,"pow(p, 2)",Slow start and accelerating finish,p (normalized 0–1),Number 0–1,NO,VERIFIED,Verified in Fusion with TG_AN_InOutTest_v0.2 on 2026-09-15.
+5,EXP-EASE-003,Easing,Ease Out Quadratic,"1 - pow(1 - p, 2)",Fast start and slowing finish,p (normalized 0–1),Number 0–1,NO,VERIFIED,Verified in Fusion with TG_AN_InOutTest_v0.2 on 2026-09-15.
+6,EXP-EASE-004,Easing,Ease In/Out Smoothstep,"pow(p, 2) * (3 - 2 * p)",Smooth acceleration and deceleration,p (normalized 0–1),Number 0–1,NO,VERIFIED,Verified in Fusion with TG_AN_InOutTest_v0.2 on 2026-09-15.
+7,EXP-TEXT-001,Text+,Horizontal alignment by side,"iif(TextSide == 1, -1, 1)",Drive Text+ HorizontalLeftCenterRight: text right of icon = -1 (left aligned); text left of icon = 1 (right aligned). HorizontalJustificationNew remains 3.,"TextSide (0=Left, 1=Right)",Number -1 or 1,NO,,
+8,EXP-TEXT-002,Text+,Normalized visible Text+ DataWindow width,(Text.Output.DataWindow[3] - Text.Output.DataWindow[1]) / Text.Output.Width,Measure the visible Text+ width normalized to the output width for layout/centering calculations.,Text = Text+ node output,Normalized width,YES,VERIFIED,Verified through TG_UI_Header v0.1.13 diagnostic and user-confirmed functional centering in v0.1.18/v0.1.20. Keep the calculated value as a real CTRL UserControl when another expression depends on it; removing that definition caused v0.1.19 Center evaluation failure. TG_UI_Header_v0.1.21 places the helper on TOOLS.
+9,EXP-TEXT-003,Text+,Normalized visible Text+ DataWindow height,(Text.Output.DataWindow[4] - Text.Output.DataWindow[2]) / Text.Output.Height,Measure the visible Text+ height normalized to the output height for responsive vertical layout/auto-height calculations.,Text = Text+ node output,Normalized height,YES,VERIFIED,"Verified in Fusion with TG_UI_Pill_v0.4.8 on 2026-09-26. Keep the calculated value as a real CTRL UserControl on TOOLS when downstream expressions depend on it, matching EXP-TEXT-002."
+,Rule,Description
+0,Master source,This Google Sheet is the authoritative reusable Fusion expression library.
+1,Reuse,Check this library before creating a new reusable expression.
+2,Updates,Add new expressions only when they have general reuse value.
+3,Verification,Do not mark expressions verified until they have been tested in DaVinci Resolve / Fusion.
+4,Boolean syntax,Avoid && in Fusion macro expressions. Use nested iif(...) conditions instead. TG_UI_Pill_v0.4.9 failed to evaluate Merge.Blend; v0.4.10 replaced && with nested iif and was user-confirmed functional on 2026-09-27.
