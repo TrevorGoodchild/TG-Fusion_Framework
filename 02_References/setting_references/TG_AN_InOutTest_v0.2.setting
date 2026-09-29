@@ -1,0 +1,79 @@
+{
+	Tools = ordered() {
+		TG_AN_InOutTest_CTRL_v0_2 = AlphaDivide {
+			NameSet = true,
+			Inputs = {
+				AnimationStart = Input { Value = 30, },
+				InLength = Input { Value = 20, },
+				InEasing = Input { Value = 3, },
+				InFade = Input { Value = 1, },
+				InScale = Input { Value = 1, },
+				InStartScale = Input { Value = 0.75, },
+				OutStart = Input { Value = 240, },
+				OutLength = Input { Value = 20, },
+				OutEasing = Input { Value = 3, },
+				OutFade = Input { Value = 1, },
+				OutScale = Input { Value = 1, },
+				OutEndScale = Input { Value = 0.75, },
+				MasterOpacity = Input { Value = 1, },
+				InProgress = Input { Expression = "min(max((time - TG_AN_InOutTest_CTRL_v0_2.AnimationStart) / max(TG_AN_InOutTest_CTRL_v0_2.InLength, 1), 0), 1)", },
+				OutProgress = Input { Expression = "min(max((time - TG_AN_InOutTest_CTRL_v0_2.OutStart) / max(TG_AN_InOutTest_CTRL_v0_2.OutLength, 1), 0), 1)", },
+				InEase = Input { Expression = "iif(TG_AN_InOutTest_CTRL_v0_2.InEasing == 0, TG_AN_InOutTest_CTRL_v0_2.InProgress, iif(TG_AN_InOutTest_CTRL_v0_2.InEasing == 1, pow(TG_AN_InOutTest_CTRL_v0_2.InProgress, 2), iif(TG_AN_InOutTest_CTRL_v0_2.InEasing == 2, 1 - pow(1 - TG_AN_InOutTest_CTRL_v0_2.InProgress, 2), pow(TG_AN_InOutTest_CTRL_v0_2.InProgress, 2) * (3 - 2 * TG_AN_InOutTest_CTRL_v0_2.InProgress))))", },
+				OutEase = Input { Expression = "iif(TG_AN_InOutTest_CTRL_v0_2.OutEasing == 0, TG_AN_InOutTest_CTRL_v0_2.OutProgress, iif(TG_AN_InOutTest_CTRL_v0_2.OutEasing == 1, pow(TG_AN_InOutTest_CTRL_v0_2.OutProgress, 2), iif(TG_AN_InOutTest_CTRL_v0_2.OutEasing == 2, 1 - pow(1 - TG_AN_InOutTest_CTRL_v0_2.OutProgress, 2), pow(TG_AN_InOutTest_CTRL_v0_2.OutProgress, 2) * (3 - 2 * TG_AN_InOutTest_CTRL_v0_2.OutProgress))))", },
+			},
+			ViewInfo = OperatorInfo { Pos = { -660, -610 } },
+			UserControls = ordered() {
+				AnimationTab = { LINKS_Name = "ANIMATION", LINKID_DataType = "Number", INPID_InputControl = "LabelControl", LBLC_DropDownButton = true, LBLC_NumInputs = 13, },
+				AnimationStart = { LINKS_Name = "Start Frame", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 30, INP_Integer = true, INP_MinScale = 0, INP_MaxScale = 300, },
+				InLength = { LINKS_Name = "IN Length", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 20, INP_Integer = true, INP_MinScale = 1, INP_MaxScale = 120, },
+				InEasing = { LINKS_Name = "IN Easing", LINKID_DataType = "Number", INPID_InputControl = "ComboControl", INP_Default = 3, { CCS_AddString = "Linear" }, { CCS_AddString = "Ease In" }, { CCS_AddString = "Ease Out" }, { CCS_AddString = "Ease In/Out" }, },
+				InFade = { LINKS_Name = "IN Fade", LINKID_DataType = "Number", INPID_InputControl = "CheckboxControl", INP_Default = 1, },
+				InScale = { LINKS_Name = "IN Scale", LINKID_DataType = "Number", INPID_InputControl = "CheckboxControl", INP_Default = 1, },
+				InStartScale = { LINKS_Name = "IN Start Scale", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 0.75, INP_MinScale = 0, INP_MaxScale = 1, },
+				OutStart = { LINKS_Name = "OUT Start Frame", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 240, INP_Integer = true, INP_MinScale = 0, INP_MaxScale = 300, },
+				OutLength = { LINKS_Name = "OUT Length", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 20, INP_Integer = true, INP_MinScale = 1, INP_MaxScale = 120, },
+				OutEasing = { LINKS_Name = "OUT Easing", LINKID_DataType = "Number", INPID_InputControl = "ComboControl", INP_Default = 3, { CCS_AddString = "Linear" }, { CCS_AddString = "Ease In" }, { CCS_AddString = "Ease Out" }, { CCS_AddString = "Ease In/Out" }, },
+				OutFade = { LINKS_Name = "OUT Fade", LINKID_DataType = "Number", INPID_InputControl = "CheckboxControl", INP_Default = 1, },
+				OutScale = { LINKS_Name = "OUT Scale", LINKID_DataType = "Number", INPID_InputControl = "CheckboxControl", INP_Default = 1, },
+				OutEndScale = { LINKS_Name = "OUT End Scale", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 0.75, INP_MinScale = 0, INP_MaxScale = 1, },
+				MasterOpacity = { LINKS_Name = "Master Opacity", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 1, INP_MinScale = 0, INP_MaxScale = 1, },
+				InProgress = { LINKS_Name = "IN Progress", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Visible = false, },
+				OutProgress = { LINKS_Name = "OUT Progress", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Visible = false, },
+				InEase = { LINKS_Name = "IN Ease", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Visible = false, },
+				OutEase = { LINKS_Name = "OUT Ease", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Visible = false, },
+			},
+		},
+		TG_AN_InOutTest_Input_v0_2 = PipeRouter {
+			ViewInfo = PipeRouterInfo { Pos = { -660, -500 } },
+		},
+		TG_AN_InOutTest_Transform_v0_2 = Transform {
+			Inputs = {
+				Size = Input {
+					Expression = "iif(time < TG_AN_InOutTest_CTRL_v0_2.AnimationStart, TG_AN_InOutTest_CTRL_v0_2.InStartScale, iif(time < TG_AN_InOutTest_CTRL_v0_2.AnimationStart + max(TG_AN_InOutTest_CTRL_v0_2.InLength, 1), iif(TG_AN_InOutTest_CTRL_v0_2.InScale == 1, TG_AN_InOutTest_CTRL_v0_2.InStartScale + (1 - TG_AN_InOutTest_CTRL_v0_2.InStartScale) * TG_AN_InOutTest_CTRL_v0_2.InEase, 1), iif(time < TG_AN_InOutTest_CTRL_v0_2.OutStart, 1, iif(time < TG_AN_InOutTest_CTRL_v0_2.OutStart + max(TG_AN_InOutTest_CTRL_v0_2.OutLength, 1), iif(TG_AN_InOutTest_CTRL_v0_2.OutScale == 1, 1 - (1 - TG_AN_InOutTest_CTRL_v0_2.OutEndScale) * TG_AN_InOutTest_CTRL_v0_2.OutEase, 1), TG_AN_InOutTest_CTRL_v0_2.OutEndScale))))",
+				},
+				Input = Input { SourceOp = "TG_AN_InOutTest_Input_v0_2", Source = "Output", },
+			},
+			ViewInfo = OperatorInfo { Pos = { -440, -500 } },
+		},
+		TG_AN_InOutTest_Canvas_v0_2 = Background {
+			Inputs = {
+				Width = Input { Expression = "comp:GetPrefs(\"Comp.FrameFormat.Width\")", },
+				Height = Input { Expression = "comp:GetPrefs(\"Comp.FrameFormat.Height\")", },
+				TopLeftAlpha = Input { Value = 0, },
+			},
+			ViewInfo = OperatorInfo { Pos = { -440, -610 } },
+		},
+		TG_AN_InOutTest_v0_2 = Merge {
+			Inputs = {
+				Background = Input { SourceOp = "TG_AN_InOutTest_Canvas_v0_2", Source = "Output", },
+				Foreground = Input { SourceOp = "TG_AN_InOutTest_Transform_v0_2", Source = "Output", },
+				Blend = Input {
+					Expression = "TG_AN_InOutTest_CTRL_v0_2.MasterOpacity * iif(time < TG_AN_InOutTest_CTRL_v0_2.AnimationStart, 0, iif(time < TG_AN_InOutTest_CTRL_v0_2.AnimationStart + max(TG_AN_InOutTest_CTRL_v0_2.InLength, 1), iif(TG_AN_InOutTest_CTRL_v0_2.InFade == 1, TG_AN_InOutTest_CTRL_v0_2.InEase, 1), iif(time < TG_AN_InOutTest_CTRL_v0_2.OutStart, 1, iif(time < TG_AN_InOutTest_CTRL_v0_2.OutStart + max(TG_AN_InOutTest_CTRL_v0_2.OutLength, 1), iif(TG_AN_InOutTest_CTRL_v0_2.OutFade == 1, 1 - TG_AN_InOutTest_CTRL_v0_2.OutEase, 1), 0))))",
+				},
+				PerformDepthMerge = Input { Value = 0, },
+			},
+			ViewInfo = OperatorInfo { Pos = { -220, -500 } },
+			Colors = { TileColor = { R = 0.372549019607843, G = 0.6, B = 0.125490196078431 }, },
+		},
+	}
+}
