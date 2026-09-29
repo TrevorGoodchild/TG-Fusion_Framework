@@ -1,0 +1,98 @@
+{
+	Tools = ordered() {
+		TG_IC_IconLoaderTest_CTRL_v0_1_2 = AlphaDivide {
+			NameSet = true,
+			Inputs = {
+				UseSelectedColor = Input { Value = 0, },
+				IconCenter = Input { Value = { 0.5, 0.5 }, },
+				IconSize = Input { Value = 1, },
+				IconAngle = Input { Value = 0, },
+				IconRed = Input { Value = 0.450980392156863, },
+				IconGreen = Input { Value = 0.698039215686274, },
+				IconBlue = Input { Value = 0.192156862745098, },
+				IconColorAlpha = Input { Value = 1, },
+				IconOpacity = Input { Value = 1, },
+			},
+			ViewInfo = OperatorInfo { Pos = { -660, -610 } },
+			UserControls = ordered() {
+				MainTab = { LINKS_Name = "MAIN", LINKID_DataType = "Number", INPID_InputControl = "LabelControl", LBLC_DropDownButton = true, LBLC_NumInputs = 9, },
+				UseSelectedColor = { LINKS_Name = "Use Selected Color", LINKID_DataType = "Number", INPID_InputControl = "CheckboxControl", INP_Default = 0, },
+				IconCenter = { LINKS_Name = "Center", LINKID_DataType = "Point", INPID_InputControl = "OffsetControl", INP_DefaultX = 0.5, INP_DefaultY = 0.5, },
+				IconSize = { LINKS_Name = "Size", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 1, INP_MinScale = 0, INP_MaxScale = 2, },
+				IconAngle = { LINKS_Name = "Angle", LINKID_DataType = "Number", INPID_InputControl = "AngleControl", INP_Default = 0, },
+				IconRed = { LINKS_Name = "Icon Color", LINKID_DataType = "Number", INPID_InputControl = "ColorControl", INP_Default = 0.450980392156863, INP_MinScale = 0, INP_MaxScale = 1, IC_ControlGroup = 1, IC_ControlID = 0, },
+				IconGreen = { LINKS_Name = "Green", LINKID_DataType = "Number", INPID_InputControl = "ColorControl", INP_Default = 0.698039215686274, INP_MinScale = 0, INP_MaxScale = 1, IC_ControlGroup = 1, IC_ControlID = 1, },
+				IconBlue = { LINKS_Name = "Blue", LINKID_DataType = "Number", INPID_InputControl = "ColorControl", INP_Default = 0.192156862745098, INP_MinScale = 0, INP_MaxScale = 1, IC_ControlGroup = 1, IC_ControlID = 2, },
+				IconColorAlpha = { LINKS_Name = "Alpha", LINKID_DataType = "Number", INPID_InputControl = "ColorControl", INP_Default = 1, INP_MinScale = 0, INP_MaxScale = 1, IC_ControlGroup = 1, IC_ControlID = 3, },
+				IconOpacity = { LINKS_Name = "Opacity", LINKID_DataType = "Number", INPID_InputControl = "SliderControl", INP_Default = 1, INP_MinScale = 0, INP_MaxScale = 1, },
+			},
+		},
+		TG_IC_IconLoaderTest_Loader_v0_1_2 = Loader {
+			Clips = {},
+			CtrlWZoom = false,
+			Inputs = {
+				["Gamut.SLogVersion"] = Input { Value = FuID { "SLog2" }, },
+			},
+			ViewInfo = OperatorInfo { Pos = { -660, -500 } },
+		},
+		TG_IC_IconLoaderTest_Transform_v0_1_2 = Transform {
+			Inputs = {
+				Center = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconCenter", },
+				Size = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconSize", },
+				Angle = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconAngle", },
+				Input = Input { SourceOp = "TG_IC_IconLoaderTest_Loader_v0_1_2", Source = "Output", },
+			},
+			ViewInfo = OperatorInfo { Pos = { -440, -500 } },
+		},
+		TG_IC_IconLoaderTest_Canvas_v0_1_2 = Background {
+			Inputs = {
+				Width = Input { Expression = "comp:GetPrefs(\"Comp.FrameFormat.Width\")", },
+				Height = Input { Expression = "comp:GetPrefs(\"Comp.FrameFormat.Height\")", },
+				TopLeftAlpha = Input { Value = 0, },
+			},
+			ViewInfo = OperatorInfo { Pos = { -440, -610 } },
+		},
+		TG_IC_IconLoaderTest_Original_v0_1_2 = Merge {
+			Inputs = {
+				Background = Input { SourceOp = "TG_IC_IconLoaderTest_Canvas_v0_1_2", Source = "Output", },
+				Foreground = Input { SourceOp = "TG_IC_IconLoaderTest_Transform_v0_1_2", Source = "Output", },
+				Blend = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconOpacity", },
+				PerformDepthMerge = Input { Value = 0, },
+			},
+			ViewInfo = OperatorInfo { Pos = { -220, -500 } },
+		},
+		TG_IC_IconLoaderTest_Color_v0_1_2 = Background {
+			Inputs = {
+				Width = Input { Expression = "comp:GetPrefs(\"Comp.FrameFormat.Width\")", },
+				Height = Input { Expression = "comp:GetPrefs(\"Comp.FrameFormat.Height\")", },
+				TopLeftRed = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconRed", },
+				TopLeftGreen = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconGreen", },
+				TopLeftBlue = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconBlue", },
+				TopLeftAlpha = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconColorAlpha", },
+				EffectMask = Input { SourceOp = "TG_IC_IconLoaderTest_Transform_v0_1_2", Source = "Output", },
+			},
+			ViewInfo = OperatorInfo { Pos = { -220, -390 } },
+		},
+		TG_IC_IconLoaderTest_ColorComposite_v0_1_2 = Merge {
+			Inputs = {
+				Background = Input { SourceOp = "TG_IC_IconLoaderTest_Canvas_v0_1_2", Source = "Output", },
+				Foreground = Input { SourceOp = "TG_IC_IconLoaderTest_Color_v0_1_2", Source = "Output", },
+				Blend = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.IconOpacity", },
+				PerformDepthMerge = Input { Value = 0, },
+			},
+			ViewInfo = OperatorInfo { Pos = { 0, -390 } },
+		},
+		TG_IC_IconLoaderTest_v0_1_2 = Switch {
+			Inputs = {
+				NumberOfInputs = Input { Value = 2, },
+				Source = Input { Expression = "TG_IC_IconLoaderTest_CTRL_v0_1_2.UseSelectedColor", },
+				Name0 = Input { Value = "Original Color", },
+				Input0 = Input { SourceOp = "TG_IC_IconLoaderTest_Original_v0_1_2", Source = "Output", },
+				Name1 = Input { Value = "Selected Color", },
+				Input1 = Input { SourceOp = "TG_IC_IconLoaderTest_ColorComposite_v0_1_2", Source = "Output", },
+			},
+			ViewInfo = OperatorInfo { Pos = { 0, -500 } },
+			Colors = { TileColor = { R = 0.372549019607843, G = 0.6, B = 0.125490196078431 }, },
+		},
+	}
+}
