@@ -1,0 +1,130 @@
+﻿TG Fusion Macro Framework — Naming Convention
+
+
+1. Node naming
+TG_XX_NODENAME_vVERSION
+
+
+TG_ is mandatory. XX is the two-letter type code. Examples:
+TG_BG_Gradient_v0.6
+TG_UI_Title_v0.6
+TG_AR_HexArray_v0.6
+
+
+2. Type codes
+BG = Background
+UI = User Interface
+AR = Array
+AN = Animation
+TX = Text
+IC = Icon
+SH = Shape
+FX = Effect
+MS = Mask
+MG = Merge
+TR = Transform
+UT = Utility
+
+
+New type codes may be introduced only when no existing code fits.
+GR = Grid
+
+
+
+
+3. CTRL node
+Every macro has exactly one central CTRL node named:
+TG_UI_NODENAME_CTRL_vVERSION
+CTRL is a role/name, never a Fusion tool class. Use a native Fusion AlphaDivide node as the preferred CTRL carrier because it is lightweight and normally functionally neutral when left unconnected. Other native nodes may be used only when technically required.
+
+
+4. Inspector structure
+Preferred tabs: MAIN, LAYOUT, STYLE, ANIMATION, ADVANCED. Create only tabs that are actually needed. Frequently used controls stay near the top; technical controls belong under ADVANCED.
+
+
+5. Composition dimensions
+Never assume 16:9. Use the current composition:
+comp:GetPrefs("Comp.FrameFormat.Width")
+comp:GetPrefs("Comp.FrameFormat.Height")
+comp:GetPrefs("Comp.FrameFormat.Width") / comp:GetPrefs("Comp.FrameFormat.Height")
+
+
+6. Native tools
+Only tools and Fuses shipped with DaVinci Resolve / Fusion are allowed. Built-in/bundled Fuses (for example Fuse.Duplicate) are permitted. No third-party plugins, externally installed Fuses or invented tool classes are allowed.
+
+
+7. Transparent canvas
+All macros except BG output on a transparent full-frame canvas derived from current comp width and height.
+
+
+8. Text
+All Text+ nodes use Oswald by default unless another font is explicitly requested.
+
+
+9. Array architecture
+AR macros accept multiple external image inputs. They do not generate source elements internally. They only position, transform, animate and composite externally supplied elements. Typical controls include position, rotation, scale, pivot, opacity, ordering, spacing, distribution and stagger.
+
+
+10. Animation
+Where appropriate use Start Frame, Animation Length, Delay/Stagger, IN Animation, Main Animation, OUT Animation and Easing. Prefer relative timing over hard-coded frame numbers.
+
+
+11. Hexagon convention
+When a hexagon is requested, default to a mathematically regular flat-top hexagon: six exactly equal sides, fully symmetric, horizontal top and bottom edges, one point left and right, no point at top or bottom.
+
+
+12. Version stages
+0.1–0.3 Prototype
+0.4–0.5 Development
+0.6–0.8 Testing
+0.9 Release Candidate
+1.0+ Stable
+
+
+Inspector page preference (2026-09-20): Name the primary user-facing inspector page MAIN instead of User, and display it before technical/secondary pages. When page ordering cannot be independently controlled, choose a secondary page name that sorts after MAIN; preserve the functional controls and verify the order in Fusion.
+
+
+Inspector empty-page policy (2026-09-22): Never deliver macros with empty Inspector pages/tabs (including a default CONTROLS page). Every visible page must contain at least one useful, visible control. Inspect the outer MacroOperator InstanceInput page assignments and internal CTRL UserControls ICS_ControlPage mappings; avoid unused page declarations or unassigned inputs. Check actual Inspector rendering and initial selected page in Fusion before marking the macro VERIFIED. Preserve working animation and expression logic when correcting page layout; if a default page cannot be suppressed using a verified native structure, document the limitation instead of inventing Fusion syntax.
+13. Color picker convention (2026-09-23)
+All future user-facing RGBA color selections must render as one unified Fusion color picker with Red, Green, Blue and Alpha channels belonging to the same picker group. Use the verified TG_IC_IconLoaderTest_v0.1.2 pattern: four numeric ColorControl channels share one IC_ControlGroup and use IC_ControlID 0=Red, 1=Green, 2=Blue, 3=Alpha. When these controls are exposed through a MacroOperator, all four corresponding InstanceInputs must also share one ControlGroup; otherwise Fusion may render separate pickers or no usable picker. Only the first channel carries the user-facing color label; the remaining channels are the R/G/B/A members of the same picker. Do not create one independent picker per channel. Overall Opacity, when needed, remains a separate slider. Treat this as the default for all TG macros unless a specific macro explicitly requires different behavior.
+
+
+
+
+14. Inspector page ordering — VERIFIED (2026-09-23)
+For MacroOperator inspector pages, CT_Priority controls the displayed page order in Fusion. Higher CT_Priority values are rendered further left / earlier than lower values. Do not rely on declaration order. Example for the standard TG layout: MAIN = ControlPage { CT_Visible = true, CT_Priority = 1, } and TOOLS = ControlPage { CT_Visible = true, CT_Priority = 0, } renders MAIN before TOOLS. This behavior was verified in Fusion with TG_UI_HexProgressBar_v0.1.10. Keep page names consistent between MacroOperator InstanceInput Page assignments and internal CTRL ICS_ControlPage mappings to avoid duplicate pages. Hide unused automatic pages such as Controls/Common only with a tested native structure; never leave empty pages in a delivered macro.
+
+
+15. Reusable Inspector patterns — VERIFIED (2026-09-23)
+Reference macro: TG_UI_HexProgressBar_v0.1.14.
+Page structure: Use explicit MacroOperator ControlPage definitions. Standard order for this pattern is MAIN → COLORS → TOOLS, followed by Fusion Settings. Page order is controlled by CT_Priority, with higher values rendered earlier/left. Example: MAIN=2, COLORS=1, TOOLS=0. Keep Page and internal ICS_ControlPage names identical to prevent duplicate or empty pages.
+Section labels: Use passive LabelControl section headers to structure controls. For expandable sections set LBLC_DropDownButton=true, define LBLC_NumInputs to exactly match the controls in the section, and use INP_Default=1 when the section must start expanded. For visual headings that must not collapse, use LBLC_DropDownButton=false, INP_Passive=true and INP_External=false.
+Color page pattern: Group colors under a dedicated COLORS page and use passive headings such as TEXT, OUTLINE and PROGRESS. Each user-facing RGBA color must be exactly one unified Fusion picker using four ColorControl channels in one IC_ControlGroup with IC_ControlID 0=Red, 1=Green, 2=Blue, 3=Alpha. The four corresponding MacroOperator InstanceInputs must share one ControlGroup. Only the first channel carries the user-facing color name. Do not create independent pickers per channel.
+Technical page pattern: Internal progress/easing/helper controls belong on TOOLS rather than MAIN. Do not leave Controls/Common or other empty pages visible. MAIN remains the first user-facing page.
+
+
+16. Native Shape selector parameters — VERIFIED (2026-09-23)
+Reference: TG_UI_HexProgressBar_v0.1.20, Fusion-tested by user.
+Shape selector architecture: native sRectangle / sEllipse / sNGon / sStar routed through native Switch nodes. Shared user control may map to different native parameter names per shape.
+sNGon side count uses native input Sides. sStar point count uses native input Points (verified from copied Fusion node: sStar { Inputs = { Points = Input { Value = 8, } } }). For a shared inspector control named Sides, connect sNGon.Sides and sStar.Points to the same CTRL value; do not assume identical native input names.
+TG_UI_HexProgressBar_v0.1.14 remains the unchanged verified Hexagon/Inspector reference. TG_UI_HexProgressBar_v0.1.20 is the verified Shape Selector extension reference for Rectangle, Circle, nGon and Star selection plus shared nGon/Star count control.
+
+
+Verified native parameter addition (2026-09-24): sRectangle corner rounding uses native input CornerRadius. Verified from Fusion-copied node: sRectangle { Inputs = { CornerRadius = Input { Value = 0.827, } } }. TG_UI_HexProgressBar_v0.1.21 was Fusion-tested successfully with Corner Radius exposed in the Inspector and connected to the left/right rectangle end shapes.
+
+
+Verified native parameter addition (2026-09-24): sRectangle corner rounding uses native input CornerRadius. Verified from a Fusion-copied sRectangle node with Inputs = { CornerRadius = Input { Value = 0.827, } }. TG_UI_HexProgressBar_v0.1.21 was user-tested successfully with this parameter exposed in the Inspector.
+17. Loader file selection convention — PENDING VERIFICATION (2026-09-26)
+For reusable TG macros that contain an internal native Loader for user-selectable icon/image media, expose the Loader file selection on the outer MacroOperator Inspector. Use the native Loader Clip input as the InstanceInput source (SourceOp = internal Loader; Source = "Clip") so the media can be changed without opening the macro internals. Keep the Loader node internal. Reference implementation: TG_UI_Header_v0.1.5. This convention becomes VERIFIED after successful Fusion testing of the exposed file picker.
+
+
+
+
+
+
+17. Loader file selection — VERIFIED (2026-09-26)
+For reusable TG macros that contain an internal Loader for user-selectable icon/image assets, expose the Loader file/Clip selection in the outer MacroOperator Inspector so the source asset can be changed after the macro is inserted. Fusion-tested reference: TG_UI_Header_v0.1.5. Expose the internal Loader input Clip through a MacroOperator InstanceInput and place it on the relevant ICON/MAIN page. The user confirmed that the icon can be changed successfully from the macro Inspector. Treat this Loader Clip exposure structure as the default verified pattern for reusable TG macros with user-selectable Loader assets. The previously verified TG_IC_IconLoaderTest_v0.1.2 remains the reference for Loader processing and unified RGBA recoloring.
+
+
+18. Blackmagic ResolveFX / OFX dependency convention (2026-09-26)
+Blackmagic-designed ResolveFX/OFX tools that are installed as part of DaVinci Resolve may be used in TG macros when technically appropriate. Treat them as integrated Blackmagic dependencies, not as native Fusion tool classes. Third-party OFX/plugins remain prohibited unless explicitly approved for a specific macro. Registry Dependencies must name any ResolveFX/OFX component used. Existing functional reference: TG_FX_Bevel_v0.1 uses Blackmagic ResolveFX EdgeDetect in a BitmapMask → Displace → MatteControl bevel chain.
